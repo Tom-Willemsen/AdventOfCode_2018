@@ -46,7 +46,7 @@ fn calculate_p1(data: &Array2<i32>) -> String {
         .map(|n| n.div_mod_floor(&GRID_SIZE))
         .max_by_key(|(y, x)| region_area(data, *y, *x, 3))
         .map(|(y, x)| format!("{},{}", x + 2, y + 2))
-        .expect("foo")
+        .expect("non-empty")
 }
 
 fn calculate_p2(data: &Array2<i32>) -> String {
