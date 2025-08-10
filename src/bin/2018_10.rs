@@ -1,4 +1,5 @@
 use advent_of_code_2018::{Cli, Parser};
+use ahash::AHashSet;
 use itertools::Itertools;
 use std::{fs, str::FromStr};
 
@@ -71,13 +72,14 @@ fn calculate(data: &[Point]) -> (String, i32) {
                 .into_option()
                 .expect("non-empty");
 
+            let included = data
+                .iter()
+                .map(|p| p.pos_after(second))
+                .collect::<AHashSet<_>>();
+
             for y in min_y..=max_y {
                 for x in min_x..=max_x {
-                    let yes = data
-                        .iter()
-                        .map(|p| p.pos_after(second))
-                        .any(|p| p == (x, y));
-                    if yes {
+                    if included.contains(&(x, y)) {
                         ans.push(b'#');
                     } else {
                         ans.push(b' ');
