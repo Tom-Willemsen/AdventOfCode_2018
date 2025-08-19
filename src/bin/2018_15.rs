@@ -1,4 +1,4 @@
-use advent_of_code_2018::{Cli, Parser, grid_util::make_byte_grid};
+use advent_of_code_2018::{grid_util::make_byte_grid, Cli, Parser};
 use ahash::AHashSet;
 use itertools::Itertools;
 use ndarray::Array2;
