@@ -134,27 +134,20 @@ fn apply_instruction(
         _ => state[instruction.b],
     };
 
-    let result = match typ {
-        InstructionType::Addi | InstructionType::Addr => val_a + val_b,
-        InstructionType::Mulr | InstructionType::Muli => val_a * val_b,
-        InstructionType::Banr | InstructionType::Bani => val_a & val_b,
-        InstructionType::Borr | InstructionType::Bori => val_a | val_b,
-        InstructionType::Setr | InstructionType::Seti => val_a,
-        InstructionType::Gtir | InstructionType::Gtri | InstructionType::Gtrr => {
-            if val_a > val_b {
-                1
-            } else {
-                0
+    let result =
+        match typ {
+            InstructionType::Addi | InstructionType::Addr => val_a + val_b,
+            InstructionType::Mulr | InstructionType::Muli => val_a * val_b,
+            InstructionType::Banr | InstructionType::Bani => val_a & val_b,
+            InstructionType::Borr | InstructionType::Bori => val_a | val_b,
+            InstructionType::Setr | InstructionType::Seti => val_a,
+            InstructionType::Gtir | InstructionType::Gtri | InstructionType::Gtrr => {
+                if val_a > val_b { 1 } else { 0 }
             }
-        }
-        InstructionType::Eqir | InstructionType::Eqri | InstructionType::Eqrr => {
-            if val_a == val_b {
-                1
-            } else {
-                0
+            InstructionType::Eqir | InstructionType::Eqri | InstructionType::Eqrr => {
+                if val_a == val_b { 1 } else { 0 }
             }
-        }
-    };
+        };
 
     let mut next_state = *state;
     next_state[instruction.out] = result;
