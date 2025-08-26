@@ -10,16 +10,16 @@ fn reduced(data: &[u8], ignore: Option<u8>) -> Vec<u8> {
     let mut to_add: VecDeque<u8> = data.iter().copied().collect();
 
     while let Some(new_elem) = to_add.pop_front() {
-        if let Some(ignore) = ignore {
-            if new_elem == ignore || new_elem == ignore + 32 {
-                continue;
-            }
+        if let Some(ignore) = ignore
+            && (new_elem == ignore || new_elem == ignore + 32)
+        {
+            continue;
         }
-        if let Some(&last_elem) = chain.last() {
-            if new_elem == last_elem + 32 || new_elem == last_elem - 32 {
-                chain.pop();
-                continue;
-            }
+        if let Some(&last_elem) = chain.last()
+            && (new_elem == last_elem + 32 || new_elem == last_elem - 32)
+        {
+            chain.pop();
+            continue;
         }
         chain.push(new_elem);
     }

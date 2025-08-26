@@ -47,7 +47,7 @@ fn calculate_p1(data: &str) -> String {
             String::from_utf8(
                 recipes
                     .iter()
-                    .skip(data as usize)
+                    .skip(data)
                     .take(10)
                     .map(|&n| b'0' + n as u8)
                     .collect::<Vec<_>>(),

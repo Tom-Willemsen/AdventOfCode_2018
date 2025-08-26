@@ -6,19 +6,19 @@ use std::fs;
 
 #[derive(PartialEq, Eq, Debug, Clone, Copy, PartialOrd, Ord)]
 enum Direction {
-    UP,
-    RIGHT,
-    DOWN,
-    LEFT,
+    Up,
+    Right,
+    Down,
+    Left,
 }
 
 impl From<u8> for Direction {
     fn from(value: u8) -> Self {
         match value {
-            b'v' => Direction::DOWN,
-            b'^' => Direction::UP,
-            b'>' => Direction::RIGHT,
-            b'<' => Direction::LEFT,
+            b'v' => Direction::Down,
+            b'^' => Direction::Up,
+            b'>' => Direction::Right,
+            b'<' => Direction::Left,
             _ => panic!("invalid direction"),
         }
     }
@@ -34,34 +34,34 @@ struct Cart {
 }
 
 impl Cart {
-    fn move_cart(&mut self, grid: &Array2<u8>) -> () {
+    fn move_cart(&mut self, grid: &Array2<u8>) {
         match grid.get((self.y, self.x)) {
             Some(b'/') => match self.dir {
-                Direction::RIGHT => self.dir = Direction::UP,
-                Direction::DOWN => self.dir = Direction::LEFT,
-                Direction::LEFT => self.dir = Direction::DOWN,
-                Direction::UP => self.dir = Direction::RIGHT,
+                Direction::Right => self.dir = Direction::Up,
+                Direction::Down => self.dir = Direction::Left,
+                Direction::Left => self.dir = Direction::Down,
+                Direction::Up => self.dir = Direction::Right,
             },
             Some(b'\\') => match self.dir {
-                Direction::DOWN => self.dir = Direction::RIGHT,
-                Direction::LEFT => self.dir = Direction::UP,
-                Direction::RIGHT => self.dir = Direction::DOWN,
-                Direction::UP => self.dir = Direction::LEFT,
+                Direction::Down => self.dir = Direction::Right,
+                Direction::Left => self.dir = Direction::Up,
+                Direction::Right => self.dir = Direction::Down,
+                Direction::Up => self.dir = Direction::Left,
             },
             Some(b'+') => {
                 if self.intersection_counter % 3 == 0 {
                     match self.dir {
-                        Direction::UP => self.dir = Direction::LEFT,
-                        Direction::RIGHT => self.dir = Direction::UP,
-                        Direction::DOWN => self.dir = Direction::RIGHT,
-                        Direction::LEFT => self.dir = Direction::DOWN,
+                        Direction::Up => self.dir = Direction::Left,
+                        Direction::Right => self.dir = Direction::Up,
+                        Direction::Down => self.dir = Direction::Right,
+                        Direction::Left => self.dir = Direction::Down,
                     }
                 } else if self.intersection_counter % 3 == 2 {
                     match self.dir {
-                        Direction::UP => self.dir = Direction::RIGHT,
-                        Direction::RIGHT => self.dir = Direction::DOWN,
-                        Direction::DOWN => self.dir = Direction::LEFT,
-                        Direction::LEFT => self.dir = Direction::UP,
+                        Direction::Up => self.dir = Direction::Right,
+                        Direction::Right => self.dir = Direction::Down,
+                        Direction::Down => self.dir = Direction::Left,
+                        Direction::Left => self.dir = Direction::Up,
                     }
                 }
                 self.intersection_counter += 1;
@@ -70,10 +70,10 @@ impl Cart {
             _ => {}
         }
         match self.dir {
-            Direction::UP => self.y -= 1,
-            Direction::DOWN => self.y += 1,
-            Direction::RIGHT => self.x += 1,
-            Direction::LEFT => self.x -= 1,
+            Direction::Up => self.y -= 1,
+            Direction::Down => self.y += 1,
+            Direction::Right => self.x += 1,
+            Direction::Left => self.x -= 1,
         }
     }
 }
@@ -132,7 +132,7 @@ fn calculate(data: &(Array2<u8>, Vec<Cart>)) -> (String, String) {
                     }
                 });
 
-                if p1 == None {
+                if p1.is_none() {
                     p1 = Some(format!("{},{}", x, y))
                 }
             }
@@ -143,8 +143,7 @@ fn calculate(data: &(Array2<u8>, Vec<Cart>)) -> (String, String) {
         p1.unwrap_or("no p1 answer".to_owned()),
         carts
             .iter()
-            .filter(|c| !c.borrow().is_removed)
-            .next()
+            .find(|c| !c.borrow().is_removed)
             .map(|c| format!("{},{}", c.borrow().x, c.borrow().y))
             .unwrap_or("no p2 answer".to_owned()),
     )
