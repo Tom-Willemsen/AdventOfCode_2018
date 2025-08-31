@@ -1,51 +1,9 @@
+use advent_of_code_2018::vm::{InstructionType, RegisterState};
 use advent_of_code_2018::{Cli, Parser};
 use ahash::{AHashMap, AHashSet};
 use itertools::Itertools;
 use std::fs;
 use std::str::FromStr;
-
-type RegisterState = [usize; 4];
-
-#[derive(PartialEq, Eq, Debug, Copy, Clone, Hash)]
-enum InstructionType {
-    Addr,
-    Addi,
-    Mulr,
-    Muli,
-    Banr,
-    Bani,
-    Borr,
-    Bori,
-    Setr,
-    Seti,
-    Gtir,
-    Gtri,
-    Gtrr,
-    Eqir,
-    Eqri,
-    Eqrr,
-}
-
-impl InstructionType {
-    const VALUES: [Self; 16] = [
-        Self::Addr,
-        Self::Addi,
-        Self::Mulr,
-        Self::Muli,
-        Self::Banr,
-        Self::Bani,
-        Self::Borr,
-        Self::Bori,
-        Self::Setr,
-        Self::Seti,
-        Self::Gtir,
-        Self::Gtri,
-        Self::Gtrr,
-        Self::Eqir,
-        Self::Eqri,
-        Self::Eqrr,
-    ];
-}
 
 #[derive(PartialEq, Eq, Debug, Copy, Clone)]
 struct Instruction {
@@ -70,9 +28,9 @@ impl FromStr for Instruction {
 
 #[derive(PartialEq, Eq, Debug, Copy, Clone)]
 struct P1InputData {
-    before: RegisterState,
+    before: RegisterState<4>,
     instruction: Instruction,
-    after: RegisterState,
+    after: RegisterState<4>,
 }
 
 impl FromStr for P1InputData {
@@ -115,10 +73,10 @@ struct InputData {
 }
 
 fn apply_instruction(
-    state: &RegisterState,
+    state: &RegisterState<4>,
     instruction: &Instruction,
     typ: InstructionType,
-) -> RegisterState {
+) -> RegisterState<4> {
     let val_a = match typ {
         InstructionType::Seti | InstructionType::Gtir | InstructionType::Eqir => instruction.a,
         _ => state[instruction.a],
